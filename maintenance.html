@@ -5,37 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maintenance Mode</title>
     <style>
-        /* Centering content and setting up base styles */
+        /* Base styles */
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            overflow: hidden; /* Prevent scrollbars */
             min-height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
             text-align: center;
             color: #333;
+            position: relative;
         }
 
         h1 {
             font-size: 2em;
             margin: 0.5em 0;
             color: #ff6347;
+            z-index: 1; /* Ensure it's above falling blocks */
         }
 
         p {
             font-size: 1.1em;
             color: #555;
+            z-index: 1;
         }
 
         /* Animating the cat GIF */
         #animated-cat {
             position: relative;
-            width: 150px; /* Adjust width if needed */
+            width: 150px;
             margin-top: 2em;
             animation: slide 4s ease-in-out infinite;
+            z-index: 1;
         }
 
         @keyframes slide {
@@ -52,6 +57,23 @@
 
         footer {
             margin-top: 4em;
+            z-index: 1;
+        }
+
+        /* Falling blocks styles */
+        .falling-block {
+            position: absolute;
+            bottom: 100vh; /* Start from the top */
+            animation: fall linear infinite;
+            z-index: 0; /* Behind other content */
+            opacity: 0.8;
+        }
+
+        /* Keyframe for block falling animation */
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
         }
 
         /* Responsive text */
@@ -80,5 +102,48 @@
 
     <!-- Google Ad Script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8378518272728116" crossorigin="anonymous"></script>
+
+    <!-- JavaScript for Falling Blocks -->
+    <script>
+        // Create a random color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Create a random size for blocks
+        function getRandomSize() {
+            return Math.floor(Math.random() * 30) + 20; // Block size between 20 and 50px
+        }
+
+        // Create a random position for blocks
+        function getRandomPosition() {
+            return Math.floor(Math.random() * window.innerWidth);
+        }
+
+        // Generate and animate falling blocks
+        function createFallingBlock() {
+            const block = document.createElement('div');
+            block.classList.add('falling-block');
+            block.style.backgroundColor = getRandomColor();
+            block.style.width = `${getRandomSize()}px`;
+            block.style.height = `${getRandomSize()}px`;
+            block.style.left = `${getRandomPosition()}px`;
+            block.style.animationDuration = `${Math.random() * 5 + 3}s`; // Random fall speed between 3-8s
+            document.body.appendChild(block);
+
+            // Remove the block once it's out of view
+            block.addEventListener('animationend', () => {
+                block.remove();
+            });
+        }
+
+        // Generate blocks continuously
+        setInterval(createFallingBlock, 200); // Adjust interval for more or fewer blocks
+    </script>
 </body>
 </html>
