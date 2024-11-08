@@ -1,5 +1,5 @@
 var maintenanceMode = true;
 
-if maintenanceMode = true {
-  window.location.href = "maintenance.html"
-};
+if (maintenanceMode === true) {
+  window.location.href = "maintenance.html";
+}
