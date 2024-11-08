@@ -25,7 +25,7 @@
             font-size: 2em;
             margin: 0.5em 0;
             color: #ff6347;
-            z-index: 1; /* Ensure it's above falling blocks */
+            z-index: 1; /* Ensure it's above Nyan Cat */
         }
 
         p {
@@ -60,19 +60,30 @@
             z-index: 1;
         }
 
-        /* Falling blocks styles */
-        .falling-block {
+        /* Flying Nyan Cat */
+        #nyan-cat {
             position: absolute;
-            bottom: 100vh; /* Start from the top */
-            animation: fall linear infinite;
+            width: 100px;
+            animation: flyAround 10s linear infinite;
             z-index: 0; /* Behind other content */
-            opacity: 0.8;
         }
 
-        /* Keyframe for block falling animation */
-        @keyframes fall {
-            to {
-                transform: translateY(100vh);
+        /* Keyframes for flying animation */
+        @keyframes flyAround {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(80vw, -20vh) rotate(15deg);
+            }
+            50% {
+                transform: translate(50vw, 50vh) rotate(30deg);
+            }
+            75% {
+                transform: translate(-80vw, 20vh) rotate(-15deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(0deg);
             }
         }
 
@@ -100,50 +111,12 @@
         </div>
     </footer>
 
+    <!-- Flying Nyan Cat -->
+    <div id="nyan-cat">
+        <img src="https://www.icegif.com/wp-content/uploads/2022/09/icegif-379.gif" alt="Flying Nyan Cat">
+    </div>
+
     <!-- Google Ad Script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8378518272728116" crossorigin="anonymous"></script>
-
-    <!-- JavaScript for Falling Blocks -->
-    <script>
-        // Create a random color
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-
-        // Create a random size for blocks
-        function getRandomSize() {
-            return Math.floor(Math.random() * 30) + 20; // Block size between 20 and 50px
-        }
-
-        // Create a random position for blocks
-        function getRandomPosition() {
-            return Math.floor(Math.random() * window.innerWidth);
-        }
-
-        // Generate and animate falling blocks
-        function createFallingBlock() {
-            const block = document.createElement('div');
-            block.classList.add('falling-block');
-            block.style.backgroundColor = getRandomColor();
-            block.style.width = `${getRandomSize()}px`;
-            block.style.height = `${getRandomSize()}px`;
-            block.style.left = `${getRandomPosition()}px`;
-            block.style.animationDuration = `${Math.random() * 5 + 3}s`; // Random fall speed between 3-8s
-            document.body.appendChild(block);
-
-            // Remove the block once it's out of view
-            block.addEventListener('animationend', () => {
-                block.remove();
-            });
-        }
-
-        // Generate blocks continuously
-        setInterval(createFallingBlock, 200); // Adjust interval for more or fewer blocks
-    </script>
 </body>
 </html>
