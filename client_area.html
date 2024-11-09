@@ -4,124 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Area</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+    <script src="https://cdn.clerk.dev/clerk.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .login-container {
-            background: #333;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .login-container h1 {
-            color: #00ffff;
-            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
-        }
-
-        .submit-btn {
-            background-color: #00cccc;
-            color: #fff;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.2em;
-            transition: background-color 0.3s;
-        }
-
-        .submit-btn:hover {
-            background-color: #00ffff;
-        }
-
-        footer {
-            margin-top: 50px;
-            color: #b3e6e6;
-            font-size: 1em;
-        }
-
-        footer a {
-            color: #00cccc;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            color: #00ffff;
-        }
-
-        .client-content {
-            display: none;
-            text-align: center;
-        }
-
-        .logout-btn {
-            background-color: #ff6666;
+            background-color: #1f1f1f;
             color: white;
+            text-align: center;
+        }
+        .login-btn {
             padding: 10px 20px;
+            font-size: 16px;
+            background-color: #7289DA;
+            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
+            margin: 10px;
         }
-
-        .logout-btn:hover {
-            background-color: #ff3333;
+        .form-container {
+            display: inline-block;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
         }
-
-        #login-error {
-            color: red;
-        }
-
-        .discord-login-btn {
-            background-color: #5865F2;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 5px;
-            font-size: 1.2em;
-            margin-top: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .discord-login-btn:hover {
-            background-color: #4752C4;
+        input {
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Login Form -->
-        <div class="login-container" id="login-container">
-            <h1>Login</h1>
-            <button onclick="loginWithDiscord()" class="discord-login-btn">Sign In with Discord</button>
-            <p id="login-error"></p>
-        </div>
 
-        <!-- Client Area Content -->
-        <div class="client-content" id="client-content">
-            <h1>Welcome to the Client Area!</h1>
-            <p>This content is only visible after login.</p>
-            <button onclick="logout()" class="logout-btn">Logout</button>
-        </div>
+    <div class="form-container" id="login-container">
+        <h1>Login</h1>
+        
+        <!-- Email/Password Form -->
+        <form id="email-password-form">
+            <input type="email" id="email" placeholder="Email" required><br>
+            <input type="password" id="password" placeholder="Password" required><br>
+            <button type="submit" class="login-btn">Login with Email</button>
+        </form>
+        
+        <!-- Google Login -->
+        <button id="google-login" class="login-btn">Login with Google</button>
+        
+        <!-- Discord Login -->
+        <button id="discord-login" class="login-btn">Login with Discord</button>
+        
+        <!-- GitHub Login -->
+        <button id="github-login" class="login-btn">Login with GitHub</button>
+    </div>
+
+    <div id="client-content" class="client-content" style="display: none;">
+        <h1>Welcome to the Client Area</h1>
+        <p>You are logged in!</p>
+        <button onclick="logout()" class="login-btn">Logout</button>
     </div>
 
     <footer>
@@ -129,60 +68,73 @@
     </footer>
 
     <script>
-        // Initialize Supabase client
-        const supabaseUrl = 'https://your-supabase-url.supabase.co'; // Replace with your Supabase URL
-        const supabaseKey = 'your-supabase-anon-key'; // Replace with your Supabase anon key
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        // Initialize Clerk with your public Frontend API key
+        const clerk = Clerk.load({
+            frontendApi: "pk_test_dm9jYWwtc3RhcmZpc2gtMTIuY2xlcmsuYWNjb3VudHMuZGV2JA", // Replace with your Clerk Frontend API key
+        });
 
-        // Check if the user is logged in and show client area
+        const loginContainer = document.getElementById("login-container");
+        const clientContent = document.getElementById("client-content");
+
+        // Check if the user is logged in
         async function checkSession() {
-            const { data: { user }, error } = await supabase.auth.getUser();
-
-            if (error) {
-                console.error('Error fetching user:', error);
-                return;
-            }
+            const { user } = await clerk.auth.getSession();
 
             if (user) {
-                document.getElementById('client-content').style.display = 'block';
-                document.getElementById('login-container').style.display = 'none';
+                loginContainer.style.display = "none";
+                clientContent.style.display = "block";
+                console.log("User logged in:", user);
             } else {
-                document.getElementById('client-content').style.display = 'none';
-                document.getElementById('login-container').style.display = 'block';
+                loginContainer.style.display = "block";
+                clientContent.style.display = "none";
             }
         }
 
-        // Discord OAuth login function
-        async function loginWithDiscord() {
-            try {
-                // Trigger the OAuth login flow with Discord
-                const { error } = await supabase.auth.signInWithOAuth({
-                    provider: 'discord',
-                    options: {
-                        redirectTo: window.location.href // Optional: specify a redirect URL after login
-                    }
-                });
+        // Login with Email and Password
+        async function loginWithEmailPassword(event) {
+            event.preventDefault();
 
-                if (error) {
-                    console.error('Error during Discord login:', error);
-                    document.getElementById('login-error').textContent = 'An error occurred during Discord login.';
-                } else {
-                    console.log('Discord login triggered');
-                }
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                await clerk.auth.signIn({
+                    identifier: email,
+                    password: password,
+                });
+                checkSession(); // Refresh the session check after login
             } catch (error) {
-                console.error('Unexpected error during login:', error);
-                document.getElementById('login-error').textContent = 'An unexpected error occurred.';
+                console.error("Error logging in with email:", error);
+            }
+        }
+
+        // Social Logins
+        async function loginWithProvider(provider) {
+            try {
+                await clerk.auth.signIn({
+                    strategy: provider, // The OAuth provider (google, discord, github)
+                });
+                checkSession();
+            } catch (error) {
+                console.error(`Error logging in with ${provider}:`, error);
             }
         }
 
         // Logout function
         async function logout() {
-            await supabase.auth.signOut();
+            await clerk.auth.signOut();
             checkSession();
         }
 
-        // Check session on page load
+        // Event listeners for buttons
+        document.getElementById("email-password-form").addEventListener("submit", loginWithEmailPassword);
+        document.getElementById("google-login").addEventListener("click", () => loginWithProvider("oauth_google"));
+        document.getElementById("discord-login").addEventListener("click", () => loginWithProvider("oauth_discord"));
+        document.getElementById("github-login").addEventListener("click", () => loginWithProvider("oauth_github"));
+
+        // Initial session check
         checkSession();
     </script>
+
 </body>
 </html>
