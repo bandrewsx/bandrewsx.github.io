@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brianna Andrews - Web Developer</title>
-    <script async src="ads.js"></script>
-    <script src="maintenance.js"></script>
     <style>
         /* Basic reset and styling */
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            color: #fff;
             margin: 0;
             background-color: #1a1a1a;
-            color: #fff;
-            overflow: hidden;
+            overflow-x: hidden;
+        }
+
+        /* Center the main profile content */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
         }
 
         /* Profile card styling */
@@ -28,25 +30,19 @@
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
             width: 350px;
+            margin-bottom: 50px;
             animation: fadeIn 1.5s ease-in-out;
         }
 
-        /* Neon glow effect for the profile image */
         .profile-card img {
             width: 150px;
             height: 150px;
             border-radius: 50%;
             margin-bottom: 20px;
             box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
-            transition: transform 0.3s ease;
             animation: pulse 2s infinite;
         }
 
-        .profile-card img:hover {
-            transform: scale(1.1);
-        }
-
-        /* Neon effect for text */
         .profile-card h1 {
             font-size: 2em;
             color: #00ffff;
@@ -60,8 +56,12 @@
             margin: 5px 0 20px;
         }
 
-        /* Skills with neon glow and hover effect */
-        .profile-card .skills span {
+        /* Skills section */
+        .skills {
+            margin: 20px 0;
+        }
+
+        .skills span {
             display: inline-block;
             background: #00cccc;
             color: #fff;
@@ -70,15 +70,62 @@
             margin: 5px 3px;
             box-shadow: 0 0 10px #00cccc, 0 0 20px #00cccc;
             transition: transform 0.3s, box-shadow 0.3s;
-            animation: fadeIn 1.5s ease-in-out;
         }
 
-        .profile-card .skills span:hover {
+        .skills span:hover {
             transform: scale(1.1);
             box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff;
+            cursor: pointer;
         }
 
-        /* Fade in and pulse animations */
+        /* Skill cards styling */
+        .skill-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .skill-card {
+            background: #333;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+            animation: fadeIn 1.5s ease-in-out;
+            color: #b3e6e6;
+        }
+
+        .skill-card h3 {
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            font-size: 1.5em;
+        }
+
+        .skill-card p {
+            font-size: 1em;
+            color: #b3e6e6;
+            margin: 10px 0;
+        }
+
+        .skill-card a {
+            color: #00cccc;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .skill-card a:hover {
+            color: #00ffff;
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
@@ -91,22 +138,49 @@
     </style>
 </head>
 <body>
-    <div class="profile-card">
-        <!-- Profile Image -->
-        <img src="brianna.png" alt="Profile Picture of Brianna Andrews">
+    <div class="container">
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <img src="brianna.png" alt="Profile Picture of Brianna Andrews">
+            <h1>Brianna Andrews</h1>
+            <p>Web Developer</p>
+            <p>Passionate about crafting beautiful and efficient web solutions.</p>
+            <div class="skills">
+                <a href="#html"><span>HTML</span></a>
+                <a href="#css"><span>CSS</span></a>
+                <a href="#javascript"><span>JavaScript</span></a>
+                <a href="#react"><span>React</span></a>
+                <a href="#nodejs"><span>Node.js</span></a>
+            </div>
+        </div>
 
-        <!-- Profile Information -->
-        <h1>Brianna Andrews</h1>
-        <p>Web Developer</p>
-        <p>Passionate about crafting beautiful and efficient web solutions.</p>
-
-        <!-- Skills Section -->
-        <div class="skills">
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>JavaScript</span>
-            <span>React</span>
-            <span>Node.js</span>
+        <!-- Skill Cards Section -->
+        <div class="skill-cards">
+            <div id="html" class="skill-card">
+                <h3>HTML</h3>
+                <p>HTML is the backbone of all web pages. It allows you to create structured documents with headings, paragraphs, lists, and links.</p>
+                <a href="contact.html">Contact Brianna</a>
+            </div>
+            <div id="css" class="skill-card">
+                <h3>CSS</h3>
+                <p>CSS is used to style web pages and bring them to life with colors, layouts, and animations. It’s what makes the web beautiful.</p>
+                <a href="contact.html">Contact Brianna</a>
+            </div>
+            <div id="javascript" class="skill-card">
+                <h3>JavaScript</h3>
+                <p>JavaScript allows you to create interactive elements on web pages, enhancing the user experience with dynamic content.</p>
+                <a href="contact.html">Contact Brianna</a>
+            </div>
+            <div id="react" class="skill-card">
+                <h3>React</h3>
+                <p>React is a JavaScript library for building modern, interactive user interfaces for single-page applications.</p>
+                <a href="contact.html">Contact Brianna</a>
+            </div>
+            <div id="nodejs" class="skill-card">
+                <h3>Node.js</h3>
+                <p>Node.js allows JavaScript to run on the server side, making it a versatile choice for building full-stack applications.</p>
+                <a href="contact.html">Contact Brianna</a>
+            </div>
         </div>
     </div>
 </body>
