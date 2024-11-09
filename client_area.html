@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Area</title>
-    <!-- Clerk JavaScript SDK -->
-    <script src="https://cdn.clerk.dev/clerk.js" defer></script>
+
+    <!-- Include Auth0 SDK -->
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0.0/auth0-spa.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,19 +43,17 @@
         <h1>Login</h1>
         <p>To access the client area, please log in</p>
         
-        <!-- Login Buttons -->
-        <button onclick="window.location.href='https://vocal-starfish-12.accounts.dev/sign-in'" class="login-btn">
-            Sign In with Clerk
-        </button>
+        <!-- Social Login Buttons -->
+        <button onclick="loginWithGoogle()" class="login-btn">Sign In with Google</button>
+        <button onclick="loginWithGitHub()" class="login-btn">Sign In with GitHub</button>
+        <button onclick="loginWithEmailPassword()" class="login-btn">Sign In with Email/Password</button>
     </div>
 
     <!-- Client Area Content -->
     <div id="client-content">
         <h1>Welcome to the Client Area</h1>
         <p>You are logged in!</p>
-        <button onclick="window.location.href='https://vocal-starfish-12.accounts.dev/user'" class="login-btn">
-            My Account
-        </button>
+        <button onclick="goToAccountPage()" class="login-btn">My Account</button>
         <button onclick="logout()" class="login-btn">Logout</button>
     </div>
 
@@ -62,36 +62,80 @@
     </footer>
 
     <script>
-        // Initialize Clerk with your Frontend API key
-        const clerk = Clerk.load({
-            frontendApi: "your-clerk-frontend-api", // Replace with your Clerk frontend API key
-        });
+        // Initialize Auth0 Client
+        let auth0Client;
 
-        const loginContainer = document.getElementById("login-container");
-        const clientContent = document.getElementById("client-content");
+        // Configure Auth0
+        async function configureAuth0() {
+            auth0Client = await createAuth0Client({
+                domain: "dev-zb3t3rjlojv3xwxy.us.auth0.com", // Replace with your Auth0 domain
+                client_id: "NpEilF3iyJO8xWAEvHBZB0PQ4ZFFrVEL", // Replace with your Auth0 client ID
+                authorizationParams: {
+                    redirect_uri: window.location.href
+                }
+            });
+            checkSession();
+        }
 
-        // Check if the user is logged in
+        // Check session to see if the user is logged in
         async function checkSession() {
-            const { user } = await clerk.auth.getSession();
-
+            const user = await auth0Client.getUser();
             if (user) {
-                loginContainer.style.display = "none";
-                clientContent.style.display = "block";
+                document.getElementById("login-container").style.display = "none";
+                document.getElementById("client-content").style.display = "block";
                 console.log("User logged in:", user);
             } else {
-                loginContainer.style.display = "block";
-                clientContent.style.display = "none";
+                document.getElementById("login-container").style.display = "block";
+                document.getElementById("client-content").style.display = "none";
             }
+        }
+
+        // Social Login with Google
+        async function loginWithGoogle() {
+            await auth0Client.loginWithRedirect({
+                redirect_uri: window.location.href,
+                connection: "google-oauth2" // This should match your Auth0 social connection for Google
+            });
+        }
+
+        // Social Login with GitHub
+        async function loginWithGitHub() {
+            await auth0Client.loginWithRedirect({
+                redirect_uri: window.location.href,
+                connection: "github" // This should match your Auth0 social connection for GitHub
+            });
+        }
+
+        // Login with Email/Password
+        async function loginWithEmailPassword() {
+            const email = prompt("Enter your email:");
+            const password = prompt("Enter your password:");
+            try {
+                await auth0Client.loginWithRedirect({
+                    redirect_uri: window.location.href,
+                    login_hint: email,
+                    password: password
+                });
+            } catch (error) {
+                console.error("Login failed:", error);
+            }
+        }
+
+        // Redirect to account page after login
+        function goToAccountPage() {
+            window.location.href = "dev-zb3t3rjlojv3xwxy.us.auth0.com/user"; // Link to the user's account page
         }
 
         // Logout function
         async function logout() {
-            await clerk.auth.signOut();
-            checkSession(); // Refresh the session check after logout
+            await auth0Client.logout({
+                returnTo: window.location.href
+            });
+            checkSession(); // Refresh session check after logout
         }
 
-        // Initial session check
-        checkSession();
+        // Initialize Auth0 when the page loads
+        configureAuth0();
     </script>
 
 </body>
