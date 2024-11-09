@@ -1,2 +1,113 @@
-<script src="maintenance.js"></script>
-<b>under maintenance</b> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brianna Andrews - Web Developer</title>
+    <script async src="ads.js"></script>
+    <script src="maintenance.js"></script>
+    <style>
+        /* Basic reset and styling */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Profile card styling */
+        .profile-card {
+            text-align: center;
+            background: #333;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            width: 350px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* Neon glow effect for the profile image */
+        .profile-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+            transition: transform 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .profile-card img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Neon effect for text */
+        .profile-card h1 {
+            font-size: 2em;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #00ffff;
+            margin: 0.5em 0;
+        }
+
+        .profile-card p {
+            font-size: 1.1em;
+            color: #b3e6e6;
+            margin: 5px 0 20px;
+        }
+
+        /* Skills with neon glow and hover effect */
+        .profile-card .skills span {
+            display: inline-block;
+            background: #00cccc;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 5px;
+            margin: 5px 3px;
+            box-shadow: 0 0 10px #00cccc, 0 0 20px #00cccc;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .profile-card .skills span:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff;
+        }
+
+        /* Fade in and pulse animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff; }
+            50% { box-shadow: 0 0 30px #00ffff, 0 0 50px #00ffff; }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <!-- Profile Image -->
+        <img src="brianna.png" alt="Profile Picture of Brianna Andrews">
+
+        <!-- Profile Information -->
+        <h1>Brianna Andrews</h1>
+        <p>Web Developer</p>
+        <p>Passionate about crafting beautiful and efficient web solutions.</p>
+
+        <!-- Skills Section -->
+        <div class="skills">
+            <span>HTML</span>
+            <span>CSS</span>
+            <span>JavaScript</span>
+            <span>React</span>
+            <span>Node.js</span>
+        </div>
+    </div>
+</body>
+</html>
