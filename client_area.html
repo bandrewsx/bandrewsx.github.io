@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Area</title>
+    <!-- Clerk JavaScript SDK -->
     <script src="https://cdn.clerk.dev/clerk.js" defer></script>
-    <!-- Include FontAwesome for social login icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,26 +29,6 @@
             border-radius: 10px;
             background-color: rgba(0, 0, 0, 0.7);
         }
-        input {
-            margin: 10px;
-            padding: 10px;
-            width: 200px;
-        }
-        .social-login-btn {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 10px;
-            display: flex;
-            align-items: center;
-        }
-        .social-login-btn i {
-            margin-right: 10px;
-        }
         #client-content {
             display: none;
         }
@@ -57,33 +36,24 @@
 </head>
 <body>
 
+    <!-- Login Container -->
     <div class="form-container" id="login-container">
         <h1>Login</h1>
+        <p>To access the client area, please log in</p>
         
-        <!-- Email/Password Form -->
-        <form id="email-password-form">
-            <input type="email" id="email" placeholder="Email" required><br>
-            <input type="password" id="password" placeholder="Password" required><br>
-            <button type="submit" class="login-btn">Login with Email</button>
-        </form>
-        
-        <!-- Social Logins with Icons -->
-        <button id="google-login" class="social-login-btn">
-            <i class="fab fa-google"></i> Login with Google
-        </button>
-        
-        <button id="discord-login" class="social-login-btn">
-            <i class="fab fa-discord"></i> Login with Discord
-        </button>
-        
-        <button id="github-login" class="social-login-btn">
-            <i class="fab fa-github"></i> Login with GitHub
+        <!-- Login Buttons -->
+        <button onclick="window.location.href='https://vocal-starfish-12.accounts.dev/sign-in'" class="login-btn">
+            Sign In with Clerk
         </button>
     </div>
 
+    <!-- Client Area Content -->
     <div id="client-content">
         <h1>Welcome to the Client Area</h1>
         <p>You are logged in!</p>
+        <button onclick="window.location.href='https://vocal-starfish-12.accounts.dev/user'" class="login-btn">
+            My Account
+        </button>
         <button onclick="logout()" class="login-btn">Logout</button>
     </div>
 
@@ -92,7 +62,7 @@
     </footer>
 
     <script>
-        // Initialize Clerk with your public Frontend API key
+        // Initialize Clerk with your Frontend API key
         const clerk = Clerk.load({
             frontendApi: "your-clerk-frontend-api", // Replace with your Clerk frontend API key
         });
@@ -114,47 +84,11 @@
             }
         }
 
-        // Login with Email and Password
-        async function loginWithEmailPassword(event) {
-            event.preventDefault();
-
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            try {
-                await clerk.auth.signIn({
-                    identifier: email,
-                    password: password,
-                });
-                checkSession(); // Refresh the session check after login
-            } catch (error) {
-                console.error("Error logging in with email:", error);
-            }
-        }
-
-        // Social Logins
-        async function loginWithProvider(provider) {
-            try {
-                await clerk.auth.signIn({
-                    strategy: provider, // The OAuth provider (google, discord, github)
-                });
-                checkSession();
-            } catch (error) {
-                console.error(`Error logging in with ${provider}:`, error);
-            }
-        }
-
         // Logout function
         async function logout() {
             await clerk.auth.signOut();
-            checkSession();
+            checkSession(); // Refresh the session check after logout
         }
-
-        // Event listeners for buttons
-        document.getElementById("email-password-form").addEventListener("submit", loginWithEmailPassword);
-        document.getElementById("google-login").addEventListener("click", () => loginWithProvider("oauth_google"));
-        document.getElementById("discord-login").addEventListener("click", () => loginWithProvider("oauth_discord"));
-        document.getElementById("github-login").addEventListener("click", () => loginWithProvider("oauth_github"));
 
         // Initial session check
         checkSession();
@@ -162,4 +96,3 @@
 
 </body>
 </html>
-
