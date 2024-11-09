@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Area</title>
-    <script src="https://cdn.clerk.dev/clerk.js"></script>
+    <script src="https://cdn.clerk.dev/clerk.js" defer></script>
+    <!-- Include FontAwesome for social login icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,6 +35,24 @@
             padding: 10px;
             width: 200px;
         }
+        .social-login-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .social-login-btn i {
+            margin-right: 10px;
+        }
+        #client-content {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -47,17 +67,21 @@
             <button type="submit" class="login-btn">Login with Email</button>
         </form>
         
-        <!-- Google Login -->
-        <button id="google-login" class="login-btn">Login with Google</button>
+        <!-- Social Logins with Icons -->
+        <button id="google-login" class="social-login-btn">
+            <i class="fab fa-google"></i> Login with Google
+        </button>
         
-        <!-- Discord Login -->
-        <button id="discord-login" class="login-btn">Login with Discord</button>
+        <button id="discord-login" class="social-login-btn">
+            <i class="fab fa-discord"></i> Login with Discord
+        </button>
         
-        <!-- GitHub Login -->
-        <button id="github-login" class="login-btn">Login with GitHub</button>
+        <button id="github-login" class="social-login-btn">
+            <i class="fab fa-github"></i> Login with GitHub
+        </button>
     </div>
 
-    <div id="client-content" class="client-content" style="display: none;">
+    <div id="client-content">
         <h1>Welcome to the Client Area</h1>
         <p>You are logged in!</p>
         <button onclick="logout()" class="login-btn">Logout</button>
@@ -70,7 +94,7 @@
     <script>
         // Initialize Clerk with your public Frontend API key
         const clerk = Clerk.load({
-            frontendApi: "pk_test_dm9jYWwtc3RhcmZpc2gtMTIuY2xlcmsuYWNjb3VudHMuZGV2JA", // Replace with your Clerk Frontend API key
+            frontendApi: "your-clerk-frontend-api", // Replace with your Clerk frontend API key
         });
 
         const loginContainer = document.getElementById("login-container");
@@ -138,3 +162,4 @@
 
 </body>
 </html>
+
