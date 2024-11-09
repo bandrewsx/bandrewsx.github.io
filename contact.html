@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Brianna Andrews</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .contact-card {
+            background: #333;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .contact-card h1 {
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+            font-size: 2.5em;
+        }
+
+        .contact-card p {
+            color: #b3e6e6;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #00cccc;
+            background-color: #222;
+            color: #fff;
+            font-size: 1em;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        .submit-btn {
+            background-color: #00cccc;
+            color: #fff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #00ffff;
+        }
+
+        footer {
+            margin-top: 50px;
+            color: #b3e6e6;
+            font-size: 1em;
+        }
+
+        footer a {
+            color: #00cccc;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="contact-card">
+            <h1>Contact Brianna Andrews</h1>
+            <p>If you have any questions or would like to collaborate, feel free to reach out!</p>
+            
+            <form action="submit_form.php" method="POST">
+                <!-- Name Input -->
+                <input type="text" class="input-field" name="name" placeholder="Your Name" required>
+
+                <!-- Email Input -->
+                <input type="email" class="input-field" name="email" placeholder="Your Email" required>
+
+                <!-- Message Textarea -->
+                <textarea class="input-field" name="message" rows="5" placeholder="Your Message" required></textarea>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>Back to <a href="index.html">Home</a></p>
+    </footer>
+</body>
+</html>
+
