@@ -38,23 +38,6 @@
             text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
         }
 
-        .input-field {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #00cccc;
-            background-color: #222;
-            color: #fff;
-            font-size: 1em;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #00ffff;
-            box-shadow: 0 0 10px #00ffff;
-        }
-
         .submit-btn {
             background-color: #00cccc;
             color: #fff;
@@ -107,6 +90,21 @@
         #login-error {
             color: red;
         }
+
+        .discord-login-btn {
+            background-color: #5865F2;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .discord-login-btn:hover {
+            background-color: #4752C4;
+        }
     </style>
 </head>
 <body>
@@ -114,9 +112,7 @@
         <!-- Login Form -->
         <div class="login-container" id="login-container">
             <h1>Login</h1>
-            <input type="email" id="email" class="input-field" placeholder="Email" required />
-            <input type="password" id="password" class="input-field" placeholder="Password" required />
-            <button onclick="login()" class="submit-btn">Login</button>
+            <button onclick="loginWithDiscord()" class="discord-login-btn">Sign In with Discord</button>
             <p id="login-error"></p>
         </div>
 
@@ -134,8 +130,8 @@
 
     <script>
         // Initialize Supabase client
-        const supabaseUrl = 'https://your-supabase-url.supabase.co'; // Replace with your Supabase URL
-        const supabaseKey = 'your-supabase-anon-key'; // Replace with your Supabase anon key
+        const supabaseUrl = 'https://lzbgipjbajafiwhjegzk.supabase.co'; // Replace with your Supabase URL
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6YmdpcGpiYWphZml3aGplZ3prIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzExNjk4MDcsImV4cCI6MjA0Njc0NTgwN30.NveKDbK5cbofnqjsIoZkTum-BRqw93kzEZDiHMhjzxk'; // Replace with your Supabase anon key
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Check if the user is logged in and show client area
@@ -156,22 +152,19 @@
             }
         }
 
-        // Login function
-        async function login() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            document.getElementById('login-error').textContent = ''; // Clear previous errors
-
+        // Discord OAuth login function
+        async function loginWithDiscord() {
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                // Trigger the OAuth login flow with Discord
+                const { error } = await supabase.auth.signInWithOAuth({
+                    provider: 'discord'
+                });
 
                 if (error) {
-                    console.error('Error during login:', error);
-                    document.getElementById('login-error').textContent = 'Invalid login credentials!';
+                    console.error('Error during Discord login:', error);
+                    document.getElementById('login-error').textContent = 'An error occurred during Discord login.';
                 } else {
-                    console.log('Login successful:', data);
-                    checkSession();
+                    console.log('Discord login triggered');
                 }
             } catch (error) {
                 console.error('Unexpected error during login:', error);
