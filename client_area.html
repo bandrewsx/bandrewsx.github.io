@@ -130,8 +130,8 @@
 
     <script>
         // Initialize Supabase client
-        const supabaseUrl = 'https://lzbgipjbajafiwhjegzk.supabase.co'; // Replace with your Supabase URL
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6YmdpcGpiYWphZml3aGplZ3prIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzExNjk4MDcsImV4cCI6MjA0Njc0NTgwN30.NveKDbK5cbofnqjsIoZkTum-BRqw93kzEZDiHMhjzxk'; // Replace with your Supabase anon key
+        const supabaseUrl = 'https://your-supabase-url.supabase.co'; // Replace with your Supabase URL
+        const supabaseKey = 'your-supabase-anon-key'; // Replace with your Supabase anon key
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Check if the user is logged in and show client area
@@ -157,7 +157,10 @@
             try {
                 // Trigger the OAuth login flow with Discord
                 const { error } = await supabase.auth.signInWithOAuth({
-                    provider: 'discord'
+                    provider: 'discord',
+                    options: {
+                        redirectTo: window.location.href // Optional: specify a redirect URL after login
+                    }
                 });
 
                 if (error) {
