@@ -1,4 +1,4 @@
-var maintenanceMode = true;
+var maintenanceMode = false;
 
 if (maintenanceMode === true) {
   window.location.href = "maintenance.html";
