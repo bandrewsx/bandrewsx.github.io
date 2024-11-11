@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Area</title>
 
-    <!-- Include Auth0 SDK -->
-    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0.0/auth0-spa.min.js"></script>
+    <!-- Include Authgear SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@authgear/web@1.0.0/dist/authgear.min.js"></script>
 
     <style>
         body {
@@ -15,7 +15,7 @@
             color: white;
             text-align: center;
         }
-        .login-btn {
+        .login-btn, .logout-btn {
             padding: 10px 20px;
             font-size: 16px;
             background-color: #7289DA;
@@ -42,19 +42,14 @@
     <div class="form-container" id="login-container">
         <h1>Login</h1>
         <p>To access the client area, please log in</p>
-        
-        <!-- Social Login Buttons -->
-        <button onclick="loginWithGoogle()" class="login-btn">Sign In with Google</button>
-        <button onclick="loginWithGitHub()" class="login-btn">Sign In with GitHub</button>
-        <button onclick="loginWithEmailPassword()" class="login-btn">Sign In with Email/Password</button>
+        <button onclick="login()" class="login-btn">Sign In</button>
     </div>
 
     <!-- Client Area Content -->
     <div id="client-content">
         <h1>Welcome to the Client Area</h1>
         <p>You are logged in!</p>
-        <button onclick="goToAccountPage()" class="login-btn">My Account</button>
-        <button onclick="logout()" class="login-btn">Logout</button>
+        <button onclick="logout()" class="logout-btn">Logout</button>
     </div>
 
     <footer>
@@ -62,80 +57,44 @@
     </footer>
 
     <script>
-        // Initialize Auth0 Client
-        let auth0Client;
+        // Initialize Authgear
+        const authgear = new authgear.Authgear({
+            endpoint: "https://bandrewsx.authgear.cloud", // Your Authgear endpoint
+            clientID: "bd82f8484da2d770", // Your Authgear client ID
+        });
 
-        // Configure Auth0
-        async function configureAuth0() {
-            auth0Client = await createAuth0Client({
-                domain: "dev-zb3t3rjlojv3xwxy.us.auth0.com", // Replace with your Auth0 domain
-                client_id: "NpEilF3iyJO8xWAEvHBZB0PQ4ZFFrVEL", // Replace with your Auth0 client ID
-                authorizationParams: {
-                    redirect_uri: window.location.href
-                }
-            });
-            checkSession();
-        }
-
-        // Check session to see if the user is logged in
+        // Function to check the user session
         async function checkSession() {
-            const user = await auth0Client.getUser();
-            if (user) {
-                document.getElementById("login-container").style.display = "none";
-                document.getElementById("client-content").style.display = "block";
-                console.log("User logged in:", user);
-            } else {
+            try {
+                const userInfo = await authgear.fetchUserInfo();
+                if (userInfo) {
+                    document.getElementById("login-container").style.display = "none";
+                    document.getElementById("client-content").style.display = "block";
+                    console.log("User logged in:", userInfo);
+                } else {
+                    document.getElementById("login-container").style.display = "block";
+                    document.getElementById("client-content").style.display = "none";
+                }
+            } catch (error) {
+                console.error("Error checking session:", error);
                 document.getElementById("login-container").style.display = "block";
                 document.getElementById("client-content").style.display = "none";
             }
         }
 
-        // Social Login with Google
-        async function loginWithGoogle() {
-            await auth0Client.loginWithRedirect({
-                redirect_uri: window.location.href,
-                connection: "google-oauth2" // This should match your Auth0 social connection for Google
-            });
+        // Login function to redirect to Authgear's Universal Login page
+        async function login() {
+            await authgear.startAuthorization();
         }
 
-        // Social Login with GitHub
-        async function loginWithGitHub() {
-            await auth0Client.loginWithRedirect({
-                redirect_uri: window.location.href,
-                connection: "github" // This should match your Auth0 social connection for GitHub
-            });
-        }
-
-        // Login with Email/Password
-        async function loginWithEmailPassword() {
-            const email = prompt("Enter your email:");
-            const password = prompt("Enter your password:");
-            try {
-                await auth0Client.loginWithRedirect({
-                    redirect_uri: window.location.href,
-                    login_hint: email,
-                    password: password
-                });
-            } catch (error) {
-                console.error("Login failed:", error);
-            }
-        }
-
-        // Redirect to account page after login
-        function goToAccountPage() {
-            window.location.href = "dev-zb3t3rjlojv3xwxy.us.auth0.com/user"; // Link to the user's account page
-        }
-
-        // Logout function
+        // Logout function to log out the user
         async function logout() {
-            await auth0Client.logout({
-                returnTo: window.location.href
-            });
-            checkSession(); // Refresh session check after logout
+            await authgear.logout();
+            checkSession(); // Re-check session after logout
         }
 
-        // Initialize Auth0 when the page loads
-        configureAuth0();
+        // Initialize Authgear session on page load
+        checkSession();
     </script>
 
 </body>
