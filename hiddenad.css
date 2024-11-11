@@ -1,0 +1,4 @@
+/* CSS to hide ads */
+.hidden-ad {
+    display: none; /* Keeps the ad divs hidden */
+}
