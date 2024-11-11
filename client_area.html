@@ -57,13 +57,13 @@
     </footer>
 
     <script>
-        // Initialize Authgear
+        // Initialize Authgear with your endpoint and client ID
         const authgear = new authgear.Authgear({
             endpoint: "https://bandrewsx.authgear.cloud", // Your Authgear endpoint
             clientID: "bd82f8484da2d770", // Your Authgear client ID
         });
 
-        // Function to check the user session
+        // Function to check the user session and show/hide content
         async function checkSession() {
             try {
                 const userInfo = await authgear.fetchUserInfo();
@@ -82,18 +82,22 @@
             }
         }
 
-        // Login function to redirect to Authgear's Universal Login page
+        // Redirect to Authgear’s Universal Login page
         async function login() {
-            await authgear.startAuthorization();
+            await authgear.startAuthorization({
+                redirectURI: window.location.href // Redirect back to this page after login
+            });
         }
 
-        // Logout function to log out the user
+        // Logout function
         async function logout() {
-            await authgear.logout();
-            checkSession(); // Re-check session after logout
+            await authgear.logout({
+                redirectURI: window.location.href // Redirect back after logout
+            });
+            checkSession();
         }
 
-        // Initialize Authgear session on page load
+        // Check session on page load
         checkSession();
     </script>
 
